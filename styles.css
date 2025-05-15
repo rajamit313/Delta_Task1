@@ -76,4 +76,30 @@ body{
     display: flex;
     justify-content: right;
 }
-@media(max-width: )
+@media (max-width: 600px) {
+    #hexaContainer {
+        display: block;
+        text-align: center;
+    }
+    #hexagon {
+        width: 100%;
+        height: auto;
+    }
+    #Timer {
+        width: 100%;
+        margin: auto;
+        /* display: block; */
+    }
+    #buttons {
+        display: flex;
+        /* flex-direction: column; */
+        gap: 10px;
+    }
+}
+.selected{
+    r: 14px;
+    stroke: yellow;
+}
+/* .circle{
+    transition: transform 1s ease-in-out;
+} */
