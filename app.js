@@ -15,6 +15,9 @@ let red  = 4;
 let blue = 4;
 let winDisplay = document.querySelector('#winDisplay');
 let scoreRed,scoreBlue;
+const errorAudio = new Audio('erroraudio.wav');
+const dropAudio = new Audio('dropaudio.wav');
+const selectAudio = new Audio('selectaudio.wav');
 
 const line = function(){ 
     for(let i = 0; i<6; i++){
@@ -43,12 +46,12 @@ function circle(R){
         p.setAttribute('fill', 'grey');
         p.setAttribute('stroke','black');
         p.setAttribute('id',`node${R}${i}`);
-        
+        p.setAttribute('class','node');
         p.addEventListener('click',()=>{
             click(p);
         })
         hexagon.appendChild(p);
-        }
+    }
 }
 
 const line_outerinner= function(){
@@ -245,24 +248,59 @@ function movementPhase1(p){
             if(id == `node${i[0]}`){
                 moveArr = i;
                 move = true;
+                // p.setAttribute('class','selected');
+                // let c = document.querySelector('.selected');
+                p.classList.add('selected');
+                selectAudio.play();
             }
         }
-    }
+    }else errorAudio.play();
 }
 function movementPhase2(p){
     if(p.getAttribute('id') == `node${moveArr[0]}`){
         move = false;
+        p.classList.remove('selected');
+        errorAudio.play();
         return;
     }
     if(p.getAttribute('fill') == 'grey'){
         for(let i of moveArr){
             if(p.getAttribute('id') === `node${i}`){
                 let id1 = document.querySelector(`#node${moveArr[0]}`);
-                p.setAttribute('fill', id1.getAttribute('fill'));
+                let circle = document.createElementNS("http://www.w3.org/2000/svg", "circle");//creating a clone circle for animation
+                circle.setAttribute('cx',id1.getAttribute('cx'));
+                circle.setAttribute('cy',id1.getAttribute('cy'));
+                circle.setAttribute('r', 12);
+                circle.setAttribute('fill',id1.getAttribute('fill'));
+                circle.setAttribute('stroke','black');
+                circle.setAttribute('class','circle');
+                hexagon.appendChild(circle);
+
+                let dx = p.getAttribute('cx')-id1.getAttribute('cx');
+                let dy = (p.getAttribute('cy'))-(id1.getAttribute('cy'));
+                const anim = document.createElementNS("http://www.w3.org/2000/svg", "animateTransform");//svg native animation as we cannot use 
+                anim.setAttribute('attributeName', 'transform');                                        //css transform directly in svg
+                anim.setAttribute('type', 'translate');
+                anim.setAttribute('from', '0,0');
+                anim.setAttribute('to', `${dx},${dy}`);
+                anim.setAttribute('dur', '1s');
+                anim.setAttribute('fill', 'freeze');
+                circle.appendChild(anim);
+                anim.beginElement();
+                // circle.style.transition = 'transform 1s ease-in-out';
+                // circle.style.transform = `translate(${p.getAttribute('cx')},${p.getAttribute('cy')})`;
+                // circle.setAttribute('transform',`translateX(${p.getAttribute('cx')}) translateY(${p.getAttribute('cy')})`);
+                let ogColour =  id1.getAttribute('fill');
                 id1.setAttribute('fill','grey');
+                id1.classList.remove('selected');
+                setTimeout(()=>{
+                    circle.remove();
+                    p.setAttribute('fill', ogColour);
+                },1000);
                 move = false;
                 titan = !titan;
                 playerTime = 10;
+                dropAudio.play();
             }
         }
     }
@@ -294,6 +332,10 @@ let playerTimer = setInterval(()=>{
     playerTime--;
     playerTimerDisplay.innerHTML = `Player Time 0${playerTime%60}`;
     if(playerTime == 0){
+        let node = document.querySelectorAll('.node');
+        for(let i of node){
+            i.classList.remove('selected');
+        }
         playerTime = 10;
         if (red === 0 && blue === 0) {
             move = false;
@@ -402,4 +444,3 @@ function win(){
 
     
     
-
