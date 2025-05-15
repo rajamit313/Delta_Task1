@@ -18,6 +18,7 @@ let scoreRed,scoreBlue;
 const errorAudio = new Audio('erroraudio.wav');
 const dropAudio = new Audio('dropaudio.wav');
 const selectAudio = new Audio('selectaudio.wav');
+const winAudio = new Audio('winningapplause.wav');
 
 const line = function(){ 
     for(let i = 0; i<6; i++){
@@ -321,9 +322,11 @@ let gameTimer = setInterval(()=>{
     }
     if(gameTime == 0){
         clearInterval(gameTimer);
-        if(scoreRed>scoreBlue) winDisplay.innerHTML = 'Player 1 wins!';
-        else if(scoreRed<scoreBlue) winDisplay.innerHTML = 'Player 2 wins!';
-        else winDisplay.innerHTML = "It's a tie!";
+        clearInterval(playerTimer);
+        if(scoreRed>scoreBlue) winDisplay.innerHTML = 'Player 1 wins!🎉';
+        else if(scoreRed<scoreBlue) winDisplay.innerHTML = 'Player 2 wins!🎉';
+        else winDisplay.innerHTML = "It's a tie!🤝";
+        winAudio.play();
     }
 },1000)
 
@@ -431,11 +434,12 @@ function win(){
         let id = document.querySelector(`#node75${i}`);
         if(id.getAttribute('fill') == 'grey') return; 
     }
-    if(scoreRed>scoreBlue) winDisplay.innerHTML = 'Player 1 wins!';
-    else if(scoreRed<scoreBlue) winDisplay.innerHTML = 'Player 2 wins!';
-    else winDisplay.innerHTML = "It's a tie!";
+    if(scoreRed>scoreBlue) winDisplay.innerHTML = "Player 1 wins!🎉";
+    else if(scoreRed<scoreBlue) winDisplay.innerHTML = "Player 2 wins!🎉";
+    else winDisplay.innerHTML = `It's a tie!🤝`;
     clearInterval(gameTimer);
     clearInterval(playerTimer);
+    winAudio.play();
 }
 
 

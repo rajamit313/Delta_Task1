@@ -1,5 +1,6 @@
 body{
     background-color: green;
+    height: 100%;
 }
 #heading{
     display: flex;
@@ -100,6 +101,11 @@ body{
     r: 14px;
     stroke: yellow;
 }
-/* .circle{
-    transition: transform 1s ease-in-out;
-} */
+#delta{
+    display: flex;
+    justify-content: center;
+    align-items: end;
+    padding-top: 50px;
+    font-size: 17px;
+    font-weight: medium;
+}
