@@ -296,6 +296,8 @@ function movementPhase2(p){
                 setTimeout(()=>{
                     circle.remove();
                     p.setAttribute('fill', ogColour);
+                    score();
+                    win();
                 },1000);
                 move = false;
                 titan = !titan;
